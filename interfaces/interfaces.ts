@@ -121,3 +121,7 @@ export interface IActorsCardProps {
   imagePath: string | null | undefined;
   name: string | null | undefined;
 }
+
+export interface IMovieID {
+  id: number;
+}
