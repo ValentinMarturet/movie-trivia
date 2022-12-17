@@ -1,15 +1,26 @@
 import { useState } from "react";
 import { Combobox } from "@headlessui/react";
 
-const movies = [
-  "El padrino",
-  "Kenton Towne",
-  "Therese Wunsch",
-  "Benedict Kessler",
-  "Katelyn Rohan",
+const movies: string[] = [
+  "The Godfather",
+  "Parasite",
+  "The Good, the Bad and the Ugly",
+  "The Dark Knight",
+  "20th Century Girl",
+  "Pulp Fiction",
+  "The Lord of the Rings: The Return of the King",
+  "Forrest Gump",
+  "The Shawshank Redemption",
+  "12 Angry Men",
+  "Schindler's List",
+  "The Godfather Part II",
 ];
 
-const MovieInput = () => {
+const MovieInput = ({
+  handleSuccess,
+  handleFail,
+  currentMovieTitle,
+}: IMovieInput) => {
   const [selectedPerson, setSelectedPerson] = useState("");
   const [query, setQuery] = useState("");
 
@@ -20,8 +31,19 @@ const MovieInput = () => {
           return person.toLowerCase().includes(query.toLowerCase());
         });
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (selectedPerson === currentMovieTitle) {
+      handleSuccess ? handleSuccess() : null;
+    } else if (movies.find((item) => item === currentMovieTitle)) {
+      handleFail ? handleFail() : null;
+    } else {
+      console.log("try aghain");
+    }
+  };
+
   return (
-    <div className="py-10">
+    <form onSubmit={handleSubmit} className="py-10">
       <Combobox value={selectedPerson} onChange={setSelectedPerson}>
         <Combobox.Input
           onChange={(event) => setQuery(event.target.value)}
@@ -44,8 +66,14 @@ const MovieInput = () => {
           ))}
         </Combobox.Options>
       </Combobox>
-    </div>
+    </form>
   );
 };
 
 export default MovieInput;
+
+interface IMovieInput {
+  handleSuccess?: () => void;
+  handleFail?: () => void;
+  currentMovieTitle?: string;
+}

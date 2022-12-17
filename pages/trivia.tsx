@@ -38,11 +38,13 @@ const fetchMovieCreditsById = async (id: number | undefined) => {
   );
   return res.json() as Promise<ICredits>;
 };
+
 const trivia = () => {
   const {
     data: movieID,
     isLoading: isLoadingID,
     isError: isErrorID,
+    refetch: refetchMovieID,
   } = useQuery(["movieID"], fetchMovieID, { refetchOnWindowFocus: false });
   const {
     data: movieDetails,
@@ -52,18 +54,31 @@ const trivia = () => {
     ["MovieDetails", movieID?.id],
     () => fetchMovieById(movieID?.id),
     {
-      enabled: !!movieID,
+      enabled: !!movieID?.id,
     }
   );
   const {
     data: credits,
     isLoading: isLoading2,
     isError: isError2,
-  } = useQuery(["movieCredits"], () => fetchMovieCreditsById(movieID?.id), {
-    enabled: !!movieID,
-  });
+  } = useQuery(
+    ["movieCredits", movieID?.id],
+    () => fetchMovieCreditsById(movieID?.id),
+    {
+      enabled: !!movieID,
+    }
+  );
 
   const [randomIndexes, setRandomIndexes] = useState<number[]>([]);
+
+  const handleSuccess = () => {
+    console.log("Success!!! Your answer was correct.");
+    refetchMovieID();
+  };
+
+  const handleFail = () => {
+    console.log("Are you sure about that?");
+  };
 
   useEffect(() => {
     let randoms = multipleRandomInts(
@@ -98,7 +113,11 @@ const trivia = () => {
           ))}
       </div>
       <div className="grid place-content-center">
-        <MovieInput />
+        <MovieInput
+          handleSuccess={handleSuccess}
+          handleFail={handleFail}
+          currentMovieTitle={movieDetails?.title}
+        />
       </div>
       <button onClick={() => console.log(movieDetails?.title)}>Nombre</button>
     </div>

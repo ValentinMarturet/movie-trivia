@@ -11,7 +11,7 @@ const ActorsCard = ({ imagePath, name }: IActorsCardProps) => {
         width={250}
         height={250 * 0.6}
       />
-      <h3 className="p-3 text-2xl text-center">{name}</h3>
+      <h3 className="p-3 text-2xl text-center max-w-[250px]">{name}</h3>
     </div>
   );
 };
