@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { textChangeRangeNewSpan } from "typescript";
 import ActorsCard from "../components/ActorsCard";
+import MovieInput from "../components/MovieInput";
 import {
   ICredits,
   IMovieID,
@@ -95,6 +96,9 @@ const trivia = () => {
               key={index}
             />
           ))}
+      </div>
+      <div className="grid place-content-center">
+        <MovieInput />
       </div>
       <button onClick={() => console.log(movieDetails?.title)}>Nombre</button>
     </div>
